@@ -106,16 +106,15 @@ class Rook < Piece
   def plausible_moves(board)
     origin = self.position
     [].tap do |moves|
-      (-7..7).each do |x_offset|
-        moves << [origin[0] + x_offset, origin[1]]
+      ('a'..'h').each do |x_var|
+        moves << [x_var, origin[1]]
       end
 
-      (-7..7).each do |y_offset|
-        moves << [origin[0], origin[1] + y_offset]
+      (1..8).each do |y_var|
+        moves << [origin[0], y_var]
       end
     end
 
-    moves
   end
 
   def move_possible?(dest, board)
