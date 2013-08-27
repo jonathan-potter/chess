@@ -1,6 +1,6 @@
 # encoding: UTF-8
 class Piece
-  @@piece_string = {
+  PIECES = {
     [:black, :king] => '♔',
     [:black, :queen] => '♕',
     [:black, :rook] => '♖',
@@ -47,7 +47,8 @@ class Piece
 
   def available_moves(board)
     moves = plausible_moves(board)
-    moves.select { |move| move_possible?(move, board) }
+    moves.select! { |move| move_possible?(move, board) }
+    p moves
   end
 
   # ensures piece cannot move to a friendly square or out of bounds.
@@ -59,16 +60,16 @@ class Piece
     end
     return false unless dest_in_bounds?(dest)
 
-    if board.in_check?(self.color)
-      temp = board.board[dest].piece
-      ################################
-    end
+    # if board.in_check?(self.color)
+    #   temp = board.board[dest].piece
+    #   ################################
+    # end
 
     true
   end
 
   def to_s
-    @@piece_string[[self.color, self.name]]
+    PIECES[[self.color, self.name]]
   end
 
 end
@@ -104,6 +105,7 @@ class Rook < Piece
   end
 
   def plausible_moves(board)
+
     origin = self.position
     [].tap do |moves|
       ('a'..'h').each do |x_var|
@@ -123,7 +125,7 @@ class Rook < Piece
     (origin[0]..dest[0]).to_a.sort.each do |x|
       (origin[1]..dest[1]).to_a.sort.each do |y|
         unless origin == [x, y] or dest == [x, y]
-          return false if board.board[[x, y]].piece.nil?
+          return false unless board.board[[x, y]].piece.nil?
         end
       end
     end
