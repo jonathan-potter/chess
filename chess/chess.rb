@@ -17,4 +17,8 @@ class Chess
     end
   end
 
+  def end_game?
+    false
+  end
+
 end
