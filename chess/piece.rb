@@ -38,7 +38,7 @@ class Piece
       if axi.is_a? String
         return false if axi < 'a' || axi > 'h'
       else
-        return false if axi < 0 || axi > 7
+        return false if axi < 1 || axi > 8
       end
     end
 

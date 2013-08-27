@@ -16,9 +16,10 @@ class HumanPlayer < Player
   end
 
   def take_input(board)
+    color_s = self.color.to_s.capitalize
     input = nil
     until input
-      print "enter your move (b1, c3): "
+      print "#{color_s}'s Turn (b1, c3): "
       input = get_valid_move(board)
     end
 
@@ -28,9 +29,13 @@ class HumanPlayer < Player
   def get_valid_move(board)
     input = gets.chomp
 
-    return nil unless input =~ /^[a-h][1-8]\,\s[a-h][1-8]$/
+    return nil unless input =~ /^[a-h][1-8]\,?\s[a-h][1-8]$/
 
-    input = input.split(', ')
+    if input.include?(',')
+      input = input.split(', ')
+    else
+      input = input.split(' ')
+    end
     origin = [input[0][0], input[0][1].to_i]
     dest = [input[1][0], input[1][1].to_i]
     [origin, dest]
