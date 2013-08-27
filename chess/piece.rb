@@ -2,7 +2,7 @@ class Piece
 
   attr_accessor :position, :color, :name, :movability
 
-  def initialize(position, color)
+  def initialize(color, position)
     self.position = position
     self.color = color
   end
@@ -29,7 +29,7 @@ end
 
 class Pawn < Piece
   COLORS = { white: 1, black: -1 }
-  def initialize(position, color)
+  def initialize(color, position)
     super(position, color)
     self.name = :pawn
   end
