@@ -113,9 +113,7 @@ class Rook < Piece
     self.name = :rook
   end
 
-  def plausible_moves(board)
-
-    origin = self.position
+  def self.rook_lines(origin)
     [].tap do |moves|
       ('a'..'h').each do |x_var|
         moves << [x_var, origin[1]]
@@ -125,7 +123,11 @@ class Rook < Piece
         moves << [origin[0], y_var]
       end
     end
+  end
 
+  def plausible_moves(board)
+    origin = self.position
+    Rook.rook_lines(origin)
   end
 
   def move_possible?(dest, board)
@@ -178,9 +180,7 @@ class Bishop < Piece
     self.name = :bishop
   end
 
-  def plausible_moves(board)
-    origin = self.position
-
+  def self.bishop_lines(origin)
     [].tap do |moves|
       (-7..7).each do |offset|
         dest_x = num_to_let( let_to_num(origin[0]) + offset )
@@ -191,6 +191,11 @@ class Bishop < Piece
         moves << [dest_x, dest_y]
       end
     end
+  end
+
+  def plausible_moves(board)
+    origin = self.position
+    Bishop.bishop_lines(origin)
   end
 
   def move_possible?(dest, board)
@@ -217,6 +222,7 @@ class Queen < Piece
     super(color, position)
     self.name = :queen
   end
+
 end
 
 class King < Piece
