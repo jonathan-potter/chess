@@ -17,4 +17,8 @@ class Board
 
   end
 
+  def move_piece(piece,place)
+
+  end
+
 end

@@ -7,14 +7,20 @@ class Piece
     self.color = color
   end
 
-  def destination_in_bounds?(dest)
-    dest.none? { |coor| coord < 0 || coor > 7}
+  def destination_in_bounds?(coord)
+    # anti-plural of axis is axi: you heard it here
+    coord.none? { |axi| axi < 0 || axi > 7}
   end
 
   def move_possible?(board,move)
     return false if board.board[move].piece.color == self.color
     return false unless destination_in_bounds?(move)
-    if board.
+
+    if board.in_check?(self.color)
+      temp = board.board[move].piece
+
+
+    end
 
     true
   end
