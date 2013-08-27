@@ -33,7 +33,6 @@ class Piece
   end
 
   def dest_in_bounds?(coord)
-    # anti-plural of axis is axi: you heard it here
     coord.each do |axi|
       if axi.is_a? String
         return false unless axi.match(/[a-h]/)
@@ -51,8 +50,6 @@ class Piece
     p moves
   end
 
-  # ensures piece cannot move to a friendly square or out of bounds.
-  # also enforces check.
   def move_possible?(dest, board)
 
     return false unless dest_in_bounds?(dest)
@@ -179,6 +176,39 @@ class Bishop < Piece
   def initialize(color, position)
     super(color, position)
     self.name = :bishop
+  end
+
+  def plausible_moves(board)
+    origin = self.position
+
+    [].tap do |moves|
+      (-7..7).each do |offset|
+        dest_x = num_to_let( let_to_num(origin[0]) + offset )
+        dest_y = origin[1] + offset
+        moves << [dest_x, dest_y]
+
+        dest_y = origin[1] - offset
+        moves << [dest_x, dest_y]
+      end
+    end
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+
+    origin = self.position
+    # debugger
+    (origin[0]..dest[0]).to_a.sort.each_with_index do |x, x_index|
+      (origin[1]..dest[1]).to_a.sort.each_with_index do |y, y_index|
+        if x_index == y_index
+          unless origin == [x, y] or dest == [x, y]
+            return false unless board.board[[x, y]].piece.nil?
+          end
+        end
+      end
+    end
+
+    true
   end
 end
 
