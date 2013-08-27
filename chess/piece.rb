@@ -1,4 +1,18 @@
+# encoding: UTF-8
 class Piece
+  PIECE_STRINGS = {
+    [:black, :king] => ♔,
+    [:black, :queen] => ♕,
+    [:black, :rook] => ♖,
+    [:black, :bishop] => ♗,
+    [:black, :knight] => ♘,
+    [:black, :pawn] => ♙,
+    [:white, :king] => ♚,
+    [:white, :queen] => ♛,
+    [:white, :rook] => ♜,
+    [:white, :bishop] => ♝,
+    [:white, :knight] => ♞,
+    [:white, :pawn] => ♟ }
 
   attr_accessor :position, :color, :name, :movability
 
@@ -23,6 +37,10 @@ class Piece
     end
 
     true
+  end
+
+  def to_s
+    PIECE_STRINGS[[self.color, self.name]]
   end
 
 end
