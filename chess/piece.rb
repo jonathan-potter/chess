@@ -45,16 +45,23 @@ class Piece
     true
   end
 
-  def move_possible?(board,move)
-    unless board.board[move].piece.nil?
-      return false if board.board[move].piece.color == self.color
+  def available_moves(board)
+    moves = plausible_moves(board)
+    moves.select { |move| move_possible?(move, board) }
+  end
+
+  # ensures piece cannot move to a friendly square or out of bounds.
+  # also enforces check.
+  def move_possible?(dest, board)
+
+    unless board.board[dest].piece.nil?
+      return false if board.board[dest].piece.color == self.color
     end
-    return false unless dest_in_bounds?(move)
+    return false unless dest_in_bounds?(dest)
 
     if board.in_check?(self.color)
-      temp = board.board[move].piece
-
-
+      temp = board.board[dest].piece
+      ################################
     end
 
     true
@@ -73,11 +80,6 @@ class Pawn < Piece
     self.name = :pawn
   end
 
-  def available_moves(board)
-    moves = plausible_moves(board)
-    moves.select { |move| move_possible?(board,move) }
-  end
-
   def plausible_moves(board)
     moves = [[self.position[0],self.position[1] + COLORS[self.color]]]
     moves + attacking_moves(board)
@@ -88,8 +90,8 @@ class Pawn < Piece
     []
   end
 
-  def move_possible?(board,move)
-    return false unless super(board, move)
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
 
     true
   end
@@ -100,6 +102,36 @@ class Rook < Piece
     super(color, position)
     self.name = :rook
   end
+
+  def plausible_moves(board)
+    origin = self.position
+    [].tap do |moves|
+      (-7..7).each do |x_offset|
+        moves << [origin[0] + x_offset, origin[1]]
+      end
+
+      (-7..7).each do |y_offset|
+        moves << [origin[0], origin[1] + y_offset]
+      end
+    end
+
+    moves
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+    origin = self.position
+    (origin[0]..dest[0]).to_a.sort.each do |x|
+      (origin[1]..dest[1]).to_a.sort.each do |y|
+        unless origin == [x, y] or dest == [x, y]
+          return false if board.board[[x, y]].piece.nil?
+        end
+      end
+    end
+
+    true
+  end
+
 end
 
 class Knight < Piece

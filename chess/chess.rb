@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require './board.rb'
 require './player.rb'
+require 'debugger'
 
 class Chess
   attr_accessor :board, :players
