@@ -223,6 +223,12 @@ class Queen < Piece
     self.name = :queen
   end
 
+  def plausible_moves(board)
+    origin = self.position
+    Rook.rook_lines(origin) + Bishop.bishop_lines(origin)
+  end
+
+
 end
 
 class King < Piece
