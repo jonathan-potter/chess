@@ -7,14 +7,15 @@ class Chess
 
   def initialize
     self.board = Board.new
-    self.players = [Player.new(:white), Player.new(:black)]
+    self.players = [HumanPlayer.new(:white), HumanPlayer.new(:black)]
   end
 
   def play
+    play_index = 0
     until end_game?
-      player = self.players.pop
-      player.turn(self.board)
-      self.players.shift(player)
+      display
+      players[play_index].turn(self.board)
+      play_index = (play_index + 1) % 2
     end
   end
 
@@ -42,4 +43,9 @@ class Chess
     false
   end
 
+end
+
+
+if __FILE__ == $PROGRAM_NAME
+  Chess.new.play
 end

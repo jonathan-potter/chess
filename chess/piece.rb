@@ -22,7 +22,7 @@ class Piece
   end
 
   def move!(dest, board)
-    raise "Out of Bounds." if dest_in_bounds?(dest)
+    raise "Out of Bounds." unless dest_in_bounds?(dest)
 
     dead_piece = board.board[dest].piece
     board.board[dest].piece = self
@@ -32,14 +32,24 @@ class Piece
     return dead_piece
   end
 
-  def destination_in_bounds?(coord)
+  def dest_in_bounds?(coord)
     # anti-plural of axis is axi: you heard it here
-    coord.none? { |axi| axi < 0 || axi > 7}
+    coord.each do |axi|
+      if axi.is_a? String
+        return false if axi < 'a' || axi > 'h'
+      else
+        return false if axi < 0 || axi > 7
+      end
+    end
+
+    true
   end
 
   def move_possible?(board,move)
-    return false if board.board[move].piece.color == self.color
-    return false unless destination_in_bounds?(move)
+    unless board.board[move].piece.nil?
+      return false if board.board[move].piece.color == self.color
+    end
+    return false unless dest_in_bounds?(move)
 
     if board.in_check?(self.color)
       temp = board.board[move].piece

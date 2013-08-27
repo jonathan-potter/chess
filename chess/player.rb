@@ -30,15 +30,15 @@ class HumanPlayer < Player
 
     return nil unless input =~ /^[a-h][1-8]\,\s[a-h][1-8]$/
 
-    input.split!(', ')
-    origin = [input[0][0], input[0][1]]
-    dest = [input[1][0], input[1][1]]
+    input = input.split(', ')
+    origin = [input[0][0], input[0][1].to_i]
+    dest = [input[1][0], input[1][1].to_i]
     [origin, dest]
 
     piece = board.board[origin].piece
     available_moves = piece.available_moves(board)
 
-    return [orgin, dest] if available_moves.include?(dest)
+    return [origin, dest] if available_moves.include?(dest)
 
     nil
   end
