@@ -69,11 +69,11 @@ class Piece
     PIECES[[self.color, self.name]]
   end
 
-  def let_to_num(let)
+  def self.let_to_num(let)
     let.ord - 'a'.ord + 1
   end
 
-  def num_to_let(num)
+  def self.num_to_let(num)
     (num + 'a'.ord - 1).chr
   end
 
@@ -125,14 +125,7 @@ class Rook < Piece
     end
   end
 
-  def plausible_moves(board)
-    origin = self.position
-    Rook.rook_lines(origin)
-  end
-
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
-    origin = self.position
+  def self.check_lines(origin, dest, board)
     (origin[0]..dest[0]).to_a.sort.each do |x|
       (origin[1]..dest[1]).to_a.sort.each do |y|
         unless origin == [x, y] or dest == [x, y]
@@ -142,6 +135,19 @@ class Rook < Piece
     end
 
     true
+  end
+
+  def plausible_moves(board)
+    origin = self.position
+    Rook.rook_lines(origin)
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+
+    origin = self.position
+
+    Rook.check_lines(origin, dest, board)
   end
 
 end
@@ -159,7 +165,7 @@ class Knight < Piece
       [-2, -1, 1, 2].each do |x_offset|
         [-2, -1, 1, 2].each do |y_offset|
           next if x_offset.abs == y_offset.abs
-          dest_x = num_to_let(let_to_num(origin[0]) + x_offset)
+          dest_x = Piece.num_to_let(Piece.let_to_num(origin[0]) + x_offset)
           dest_y = origin[1] + y_offset
           moves << [dest_x, dest_y]
         end
@@ -183,7 +189,7 @@ class Bishop < Piece
   def self.bishop_lines(origin)
     [].tap do |moves|
       (-7..7).each do |offset|
-        dest_x = num_to_let( let_to_num(origin[0]) + offset )
+        dest_x = Piece.num_to_let( Piece.let_to_num(origin[0]) + offset )
         dest_y = origin[1] + offset
         moves << [dest_x, dest_y]
 
@@ -193,16 +199,7 @@ class Bishop < Piece
     end
   end
 
-  def plausible_moves(board)
-    origin = self.position
-    Bishop.bishop_lines(origin)
-  end
-
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
-
-    origin = self.position
-    # debugger
+  def self.check_lines(origin, dest, board)
     (origin[0]..dest[0]).to_a.sort.each_with_index do |x, x_index|
       (origin[1]..dest[1]).to_a.sort.each_with_index do |y, y_index|
         if x_index == y_index
@@ -214,6 +211,19 @@ class Bishop < Piece
     end
 
     true
+  end
+
+  def plausible_moves(board)
+    origin = self.position
+    Bishop.bishop_lines(origin)
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+
+    origin = self.position
+
+    Bishop.check_lines(origin, dest, board)
   end
 end
 
@@ -228,6 +238,13 @@ class Queen < Piece
     Rook.rook_lines(origin) + Bishop.bishop_lines(origin)
   end
 
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+
+    origin = self.position
+
+    Rook.check_lines(origin, dest, board) and Bishop.check_lines(origin, dest, board)
+  end
 
 end
 
