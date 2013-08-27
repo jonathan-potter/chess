@@ -41,6 +41,8 @@ class HumanPlayer < Player
     [origin, dest]
 
     piece = board.board[origin].piece
+    return nil if piece.nil?
+    return nil if piece.color != self.color
     available_moves = piece.available_moves(board)
 
     return [origin, dest] if available_moves.include?(dest)
