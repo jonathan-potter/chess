@@ -1,9 +1,12 @@
+# encoding: UTF-8
+require './tile.rb'
+
 class Board
   attr_accessor :board
 
   def initialize
     self.board = build_board
-    populate_board!
+    # populate_board!
   end
 
   def build_board
@@ -23,10 +26,10 @@ class Board
     white_major = []
 
     ('a'..'h').each do |x|
-      black_major << hash[[x, 8]]
-      black_pawns << hash[[x, 7]]
-      white_pawns << hash[[x, 2]]
-      white_major << hash[[x, 1]]
+      black_major << self.board[[x, 8]]
+      black_pawns << self.board[[x, 7]]
+      white_pawns << self.board[[x, 2]]
+      white_major << self.board[[x, 1]]
     end
 
     place_major(:black, black_major)

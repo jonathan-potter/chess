@@ -1,5 +1,6 @@
-require './board'
-require './players'
+# encoding: UTF-8
+require './board.rb'
+require './player.rb'
 
 class Chess
   attr_accessor :board, :players, :dead_pieces
@@ -27,12 +28,12 @@ class Chess
       rows << row
     end
 
-    puts '-' * (8*3)
+    puts '-' * ((8*4) + 1)
     rows.each do |row|
       print "| "
       print row.join(" | ")
       puts " |"
-      puts '-' * (8*3)
+      puts '-' * ((8*4) + 1)
     end
 
   end

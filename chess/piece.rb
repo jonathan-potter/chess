@@ -1,18 +1,18 @@
 # encoding: UTF-8
 class Piece
-  PIECE_STRINGS = {
-    [:black, :king] => ♔,
-    [:black, :queen] => ♕,
-    [:black, :rook] => ♖,
-    [:black, :bishop] => ♗,
-    [:black, :knight] => ♘,
-    [:black, :pawn] => ♙,
-    [:white, :king] => ♚,
-    [:white, :queen] => ♛,
-    [:white, :rook] => ♜,
-    [:white, :bishop] => ♝,
-    [:white, :knight] => ♞,
-    [:white, :pawn] => ♟ }
+  @@piece_string = {
+    [:black, :king] => '♔',
+    [:black, :queen] => '♕',
+    [:black, :rook] => '♖',
+    [:black, :bishop] => '♗',
+    [:black, :knight] => '♘',
+    [:black, :pawn] => '♙',
+    [:white, :king] => '♚',
+    [:white, :queen] => '♛',
+    [:white, :rook] => '♜',
+    [:white, :bishop] => '♝',
+    [:white, :knight] => '♞',
+    [:white, :pawn] => '♟' }
 
   attr_accessor :position, :color, :name, :movability
 
@@ -40,7 +40,7 @@ class Piece
   end
 
   def to_s
-    PIECE_STRINGS[[self.color, self.name]]
+    @@piece_string[[self.color, self.name]]
   end
 
 end
@@ -48,13 +48,14 @@ end
 class Pawn < Piece
   COLORS = { white: 1, black: -1 }
   def initialize(color, position)
-    super(position, color)
+    super(color, position)
     self.name = :pawn
   end
 
 
   def move(board,destination)
     raise "Out of Bounds." if dest_in_bounds?(destinations)
+    moves = available_moves(board)
   end
 
   def available_moves(board)
@@ -63,11 +64,9 @@ class Pawn < Piece
   end
 
   def plausible_moves(board)
-    moves = [[self.position[0],self.position[1] + COLORS[self.color]]
-    moves += attacking_moves(board)
+    moves = [[self.position[0],self.position[1] + COLORS[self.color]]]
+    moves + attacking_moves(board)
   end
-
-
 
   # special case for pawn attacking diagonally
   def attacking_moves(board)
@@ -81,16 +80,36 @@ class Pawn < Piece
 end
 
 class Rook < Piece
+  def initialize(color, position)
+    super(color, position)
+    self.name = :rook
+  end
 end
 
 class Knight < Piece
+  def initialize(color, position)
+    super(color, position)
+    self.name = :knight
+  end
 end
 
 class Bishop < Piece
+  def initialize(color, position)
+    super(color, position)
+    self.name = :bishop
+  end
 end
 
 class Queen < Piece
+  def initialize(color, position)
+    super(color, position)
+    self.name = :queen
+  end
 end
 
 class King < Piece
+  def initialize(color, position)
+    super(color, position)
+    self.name = :king
+  end
 end

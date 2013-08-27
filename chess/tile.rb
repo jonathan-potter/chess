@@ -1,8 +1,7 @@
+# encoding: UTF-8
 require './piece'
 
 class Tile
-
-
   attr_accessor :piece, :position
 
   def initialize(coord)
