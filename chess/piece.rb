@@ -14,7 +14,7 @@ class Piece
     [:white, :knight] => '♞',
     [:white, :pawn] => '♟' }
 
-  attr_accessor :position, :color, :name, :movability
+  attr_accessor :position, :color, :name
 
   def initialize(color, position)
     self.position = position
@@ -53,9 +53,15 @@ class Pawn < Piece
   end
 
 
-  def move(board,destination)
-    raise "Out of Bounds." if dest_in_bounds?(destinations)
-    moves = available_moves(board)
+  def move(board,move)
+    raise "Out of Bounds." if dest_in_bounds?(move)
+
+    dead_piece = board.board[move].piece
+    board.board[move].piece = self
+    board.board[self.position].piece = nil
+    self.position = move
+
+    return dead_piece
   end
 
   def available_moves(board)
@@ -76,6 +82,7 @@ class Pawn < Piece
   def move_possible?(board,move)
     return false unless super(board, move)
 
+    true
   end
 end
 

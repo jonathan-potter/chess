@@ -66,6 +66,7 @@ class Board
 
   def move_piece(piece,coord)
 
+
   end
 
 end
