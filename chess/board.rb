@@ -2,11 +2,12 @@
 require './tile.rb'
 
 class Board
-  attr_accessor :board
+  attr_accessor :board, :dead_pieces
 
   def initialize
     self.board = build_board
-    # populate_board!
+    self.populate_board!
+    self.dead_pieces = []
   end
 
   def build_board

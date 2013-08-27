@@ -21,6 +21,17 @@ class Piece
     self.color = color
   end
 
+  def move!(dest, board)
+    raise "Out of Bounds." if dest_in_bounds?(dest)
+
+    dead_piece = board.board[dest].piece
+    board.board[dest].piece = self
+    board.board[self.position].piece = nil
+    self.position = dest
+
+    return dead_piece
+  end
+
   def destination_in_bounds?(coord)
     # anti-plural of axis is axi: you heard it here
     coord.none? { |axi| axi < 0 || axi > 7}
@@ -50,18 +61,6 @@ class Pawn < Piece
   def initialize(color, position)
     super(color, position)
     self.name = :pawn
-  end
-
-
-  def move(board,move)
-    raise "Out of Bounds." if dest_in_bounds?(move)
-
-    dead_piece = board.board[move].piece
-    board.board[move].piece = self
-    board.board[self.position].piece = nil
-    self.position = move
-
-    return dead_piece
   end
 
   def available_moves(board)

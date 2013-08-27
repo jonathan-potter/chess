@@ -3,7 +3,7 @@ require './board.rb'
 require './player.rb'
 
 class Chess
-  attr_accessor :board, :players, :dead_pieces
+  attr_accessor :board, :players
 
   def initialize
     self.board = Board.new
@@ -13,7 +13,7 @@ class Chess
   def play
     until end_game?
       player = self.players.pop
-      player.turn
+      player.turn(self.board)
       self.players.shift(player)
     end
   end
