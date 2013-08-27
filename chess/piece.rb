@@ -36,9 +36,9 @@ class Piece
     # anti-plural of axis is axi: you heard it here
     coord.each do |axi|
       if axi.is_a? String
-        return false if axi < 'a' || axi > 'h'
+        return false unless axi.match(/[a-h]/)
       else
-        return false if axi < 1 || axi > 8
+        return false unless axi.between?(1,8)
       end
     end
 
@@ -55,10 +55,10 @@ class Piece
   # also enforces check.
   def move_possible?(dest, board)
 
+    return false unless dest_in_bounds?(dest)
     unless board.board[dest].piece.nil?
       return false if board.board[dest].piece.color == self.color
     end
-    return false unless dest_in_bounds?(dest)
 
     # if board.in_check?(self.color)
     #   temp = board.board[dest].piece
@@ -70,6 +70,14 @@ class Piece
 
   def to_s
     PIECES[[self.color, self.name]]
+  end
+
+  def let_to_num(let)
+    let.ord - 'a'.ord + 1
+  end
+
+  def num_to_let(num)
+    (num + 'a'.ord - 1).chr
   end
 
 end
@@ -143,6 +151,27 @@ class Knight < Piece
   def initialize(color, position)
     super(color, position)
     self.name = :knight
+  end
+
+  def plausible_moves(board)
+
+    origin = self.position
+    [].tap do |moves|
+      [-2, -1, 1, 2].each do |x_offset|
+        [-2, -1, 1, 2].each do |y_offset|
+          next if x_offset.abs == y_offset.abs
+          dest_x = num_to_let(let_to_num(origin[0]) + x_offset)
+          dest_y = origin[1] + y_offset
+          moves << [dest_x, dest_y]
+        end
+      end
+    end
+
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+    true
   end
 end
 
