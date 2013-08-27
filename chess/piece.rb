@@ -7,13 +7,14 @@ class Piece
     self.color = color
   end
 
-  def destination_in_bounds?(destinations)
+  def destination_in_bounds?(dest)
     dest.none? { |coor| coord < 0 || coor > 7}
   end
 
   def move_possible?(board,move)
-    return false if board[move].piece.color == self.color
-    return false if
+    return false if board.board[move].piece.color == self.color
+    return false unless destination_in_bounds?(move)
+    if board.
 
     true
   end
