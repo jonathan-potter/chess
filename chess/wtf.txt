@@ -23,7 +23,8 @@ return false unless super(dest, board)
 # removes moves that are not in the bounds of the board
 # disallows the pieces to take their own dudes
 # removes moves that would put the player into check
-return false if moved_into_check?(dest, board)
+SuperPiece::return false if moved_into_check?(dest, board)
+##################################################
 ##################################################
 ###### make suer we don't check ourselves ########
 ##################################################
