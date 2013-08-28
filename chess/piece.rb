@@ -253,4 +253,24 @@ class King < Piece
     super(color, position)
     self.name = :king
   end
+
+  def plausible_moves(board)
+
+    origin = self.position
+    [].tap do |moves|
+      [-1, 0, 1].each do |x_offset|
+        [-1, 0, 1].each do |y_offset|
+          dest_x = Piece.num_to_let(Piece.let_to_num(origin[0]) + x_offset)
+          dest_y = origin[1] + y_offset
+          moves << [dest_x, dest_y]
+        end
+      end
+    end
+
+  end
+
+  def move_possible?(dest, board)
+    return false unless super(dest, board)
+    true
+  end
 end
