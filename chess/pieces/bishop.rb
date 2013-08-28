@@ -22,8 +22,8 @@ class Bishop < Piece
     dest_0 = Piece.let_to_num(dest[0])
     origin_0 = Piece.let_to_num(origin[0])
 
-    x_sign = (dest_0 - origin_0) / ((dest_0 - origin_0).abs)
-    y_sign = (dest[1] - origin[1]) / ((dest[1] - origin[1]).abs)
+    x_sign = (dest_0 - origin_0) > 0 ? 1 : -1
+    y_sign = (dest[1] - origin[1]) > 0 ? 1 : -1
     diff = (origin[1] - dest[1]).abs
 
     (diff + 1).times do |axis_offset|
@@ -31,7 +31,7 @@ class Bishop < Piece
       y = origin[1] + (axis_offset * y_sign)
       piece = board.board[[x, y]]
       unless origin == [x, y] or dest == [x, y]
-        return false unless board.board[[x, y]].piece.nil?
+        return false unless piece.nil?
       end
     end
 
@@ -43,11 +43,22 @@ class Bishop < Piece
     Bishop.bishop_lines(origin)
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, board, ignore = false)
+    # return false unless super(dest, board)
+
+    return false unless dest_in_bounds?(dest)
+    unless board.board[dest].piece.nil?
+      return false if board.board[dest].piece.color == self.color
+    end
 
     origin = self.position
 
-    Bishop.check_lines(origin, dest, board)
+    return false unless Bishop.check_lines(origin, dest, board)
+
+    unless ignore
+      return false if moved_into_check?(dest, board)
+    end
+
+    true
   end
 end

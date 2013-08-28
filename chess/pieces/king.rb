@@ -17,12 +17,6 @@ class King < Piece
         end
       end
     end
-
-  end
-
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
-    true
   end
 
 end

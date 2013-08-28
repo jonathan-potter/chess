@@ -20,8 +20,4 @@ class Knight < Piece
 
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
-    true
-  end
 end

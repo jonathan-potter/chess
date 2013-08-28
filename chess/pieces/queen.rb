@@ -9,16 +9,27 @@ class Queen < Piece
     Rook.rook_lines(origin) + Bishop.bishop_lines(origin)
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, board, ignore = false)
+    # return false unless super(dest, board)
+
+    return false unless dest_in_bounds?(dest)
+    unless board.board[dest].piece.nil?
+      return false if board.board[dest].piece.color == self.color
+    end
 
     origin = self.position
 
     if origin[0] == dest[0] or origin[1] == dest[1]
-      Rook.check_lines(origin, dest, board)
+      return false unless Rook.check_lines(origin, dest, board)
     else
-      Bishop.check_lines(origin, dest, board)
+      return false unless Bishop.check_lines(origin, dest, board)
     end
+
+    unless ignore
+      return false if moved_into_check?(dest, board)
+    end
+
+    true
   end
 
 end
