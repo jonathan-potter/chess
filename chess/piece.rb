@@ -47,6 +47,7 @@ class Piece
   def available_moves(board)
     moves = plausible_moves(board)
     moves.select! { |move| move_possible?(move, board) }
+    moves
   end
 
   def move_possible?(dest, board)

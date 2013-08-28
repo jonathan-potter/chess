@@ -66,7 +66,7 @@ class Board
     opp_pieces = all_pieces(other_color(color))
 
     opp_pieces.each do |piece|
-      moves = piece.available_moves
+      moves = piece.available_moves(self)
       return true if moves.include?(king.position)
     end
 
@@ -74,11 +74,11 @@ class Board
   end
 
   def checkmate?(color)
-    return false unless in_check?(color)
+    # return false unless in_check?(color)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves
+      moves = piece.available_moves(self)
       return false if moves.any?
     end
 
@@ -86,11 +86,12 @@ class Board
   end
 
   def stalemate?(color)
-    return false if in_check?(color)
+    # return false if in_check?(color)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves
+      moves = piece.available_moves(self)
+   debugger if moves.nil?
       return false if moves.any?
     end
 
@@ -102,7 +103,7 @@ class Board
       (1..8).each do |y|
         piece = self.board[[x, y]].piece
         next if piece.nil?
-        return piece if piece.color == color and piece.name == :king
+        return piece if (piece.color == color and piece.name == :king)
       end
     end
   end
