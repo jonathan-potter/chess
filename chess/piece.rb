@@ -47,7 +47,6 @@ class Piece
   def available_moves(board)
     moves = plausible_moves(board)
     moves.select! { |move| move_possible?(move, board) }
-    p moves
   end
 
   def move_possible?(dest, board)
@@ -57,12 +56,24 @@ class Piece
       return false if board.board[dest].piece.color == self.color
     end
 
-    # if board.in_check?(self.color)
-    #   temp = board.board[dest].piece
-    #   ################################
-    # end
+    return false if moved_into_check?(dest, board)
 
     true
+  end
+
+  def moved_into_check?(dest, board)
+    origin = self.position
+    saved_piece = move!(dest, board)
+    if board.in_check?(self.color)
+      move!(origin, board)
+      board.board[dest].piece = saved_piece
+      return true
+    else
+      move!(origin, board)
+      board.board[dest].piece = saved_piece
+    end
+
+    false
   end
 
   def to_s

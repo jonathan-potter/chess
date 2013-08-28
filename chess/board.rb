@@ -62,12 +62,43 @@ class Board
   end
 
   def in_check?(color)
+    king = find_king(color)
+    opp_pieces = all_pieces(other_color(color))
 
+    opp_pieces.each do |piece|
+      moves = piece.available_moves
+      return true if moves.include?(king.position)
+    end
+
+    false
   end
 
-  def move_piece(piece,coord)
-
-
+  def find_king(color)
+    ('a'..'h').each do |x|
+      (1..8).each do |y|
+        piece = self.board[[x, y]].piece
+        next if piece.nil?
+        return piece if piece.color == color and piece.name == :king
+      end
+    end
   end
+
+  def all_pieces(color)
+    [].tap do |pieces|
+      ('a'..'h').each do |x|
+        (1..8).each do |y|
+          piece = self.board[[x, y]].piece
+          next if piece.nil?
+          pieces << piece if piece.color == color
+        end
+      end
+    end
+  end
+
+  def other_color(color)
+    raise "Invalid Color" unless [:white, :black].include?(color)
+    color == :white ? :black : :white
+  end
+
 
 end
