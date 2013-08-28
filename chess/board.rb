@@ -67,7 +67,9 @@ class Board
 
     opp_pieces.each do |piece|
       moves = piece.available_moves(self)
-      return true if moves.include?(king.position)
+      if moves.include?(king.position)
+        return true
+      end
     end
 
     false

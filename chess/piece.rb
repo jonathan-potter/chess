@@ -48,6 +48,7 @@ class Piece
     blk ||= Proc.new { |move| move_possible?(move, board) }
 
     moves = plausible_moves(board)
+    # moves.delete(self.position)
 
     moves.select!(&blk)
     moves
@@ -77,6 +78,7 @@ class Piece
 
   def moved_into_check?(dest, board)
     origin = self.position
+    saved_piece = move!(dest, board)
     king = board.find_king(self.color)
     k_pos = king.position
     color = self.color
@@ -89,7 +91,6 @@ class Piece
 
     no_check_proc = Proc.new { |move| ignore_check_move_possible?(move, board) }
 
-    saved_piece = move!(dest, board)
     pieces.each do |piece|
       moves = piece.available_moves(board, &no_check_proc)
       moves.each do |move|
@@ -215,8 +216,10 @@ class Rook < Piece
   end
 
   def self.check_lines(origin, dest, board)
-    (origin[0]..dest[0]).to_a.sort.each do |x|
-      (origin[1]..dest[1]).to_a.sort.each do |y|
+    x_range = [origin[0], dest[0]].sort
+    y_range = [origin[1], dest[1]].sort
+    (x_range[0]..x_range[1]).to_a.each do |x|
+      (y_range[0]..y_range[1]).to_a.each do |y|
         unless origin == [x, y] or dest == [x, y]
           return false unless board.board[[x, y]].piece.nil?
         end
@@ -289,13 +292,20 @@ class Bishop < Piece
   end
 
   def self.check_lines(origin, dest, board)
-    (origin[0]..dest[0]).to_a.sort.each_with_index do |x, x_index|
-      (origin[1]..dest[1]).to_a.sort.each_with_index do |y, y_index|
-        if x_index == y_index
-          unless origin == [x, y] or dest == [x, y]
-            return false unless board.board[[x, y]].piece.nil?
-          end
-        end
+    return true if dest == origin
+    dest_0 = Piece.let_to_num(dest[0])
+    origin_0 = Piece.let_to_num(origin[0])
+
+    x_sign = (dest_0 - origin_0) / ((dest_0 - origin_0).abs)
+    y_sign = (dest[1] - origin[1]) / ((dest[1] - origin[1]).abs)
+    diff = (origin[1] - dest[1]).abs
+
+    (diff + 1).times do |axis_offset|
+      x = Piece.let_offset(origin[0], (axis_offset * x_sign))
+      y = origin[1] + (axis_offset * y_sign)
+      piece = board.board[[x, y]]
+      unless origin == [x, y] or dest == [x, y]
+        return false unless board.board[[x, y]].piece.nil?
       end
     end
 
@@ -332,7 +342,11 @@ class Queen < Piece
 
     origin = self.position
 
-    Rook.check_lines(origin, dest, board) and Bishop.check_lines(origin, dest, board)
+    if origin[0] == dest[0] or origin[1] == dest[1]
+      Rook.check_lines(origin, dest, board)
+    else
+      Bishop.check_lines(origin, dest, board)
+    end
   end
 
 end
@@ -349,7 +363,8 @@ class King < Piece
     [].tap do |moves|
       [-1, 0, 1].each do |x_offset|
         [-1, 0, 1].each do |y_offset|
-          dest_x = Piece.num_to_let(Piece.let_to_num(origin[0]) + x_offset)
+          next if x_offset == 0 and y_offset == 0
+          dest_x = Piece.let_offset(origin[0], x_offset)
           dest_y = origin[1] + y_offset
           moves << [dest_x, dest_y]
         end
@@ -362,4 +377,5 @@ class King < Piece
     return false unless super(dest, board)
     true
   end
+
 end

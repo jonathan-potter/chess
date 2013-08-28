@@ -22,7 +22,6 @@ class HumanPlayer < Player
       print "#{color_s}'s Turn (b1, c3): "
       input = get_valid_move(board)
     end
-
     input
   end
 
@@ -38,7 +37,6 @@ class HumanPlayer < Player
     end
     origin = [input[0][0], input[0][1].to_i]
     dest = [input[1][0], input[1][1].to_i]
-    [origin, dest]
 
     piece = board.board[origin].piece
     return nil if piece.nil?
