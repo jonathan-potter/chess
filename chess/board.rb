@@ -74,7 +74,7 @@ class Board
   end
 
   def checkmate?(color)
-    # return false unless in_check?(color)
+    return false unless in_check?(color)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
@@ -86,7 +86,7 @@ class Board
   end
 
   def stalemate?(color)
-    # return false if in_check?(color)
+    return false if in_check?(color)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
@@ -103,9 +103,11 @@ class Board
       (1..8).each do |y|
         piece = self.board[[x, y]].piece
         next if piece.nil?
+        # debugger if piece.name == :king
         return piece if (piece.color == color and piece.name == :king)
       end
     end
+    raise "King not found for #{color}"
   end
 
   def all_pieces(color)
