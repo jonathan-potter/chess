@@ -78,7 +78,9 @@ class Board
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(self)
+      moves = piece.available_moves(self) do |move|
+        ignore_check_move_possible?(move, board)
+      end
       return false if moves.any?
     end
 
