@@ -73,9 +73,20 @@ class Board
     false
   end
 
-  def checkmate?(color = nil)
-    return (checkmate(:white) or checkmate(:black)) if color.nil?
+  def checkmate?(color)
     return false unless in_check?(color)
+
+    our_pieces = all_pieces(color)
+    our_pieces.each do |piece|
+      moves = piece.available_moves
+      return false if moves.any?
+    end
+
+    true
+  end
+
+  def stalemate?(color)
+    return false if in_check?(color)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|

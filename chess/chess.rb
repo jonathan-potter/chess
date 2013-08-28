@@ -13,17 +13,18 @@ class Chess
 
   def play
     play_index = 0
-    until end_game?(players[0])
+    until end_game?(players[play_index].color)
       display
       players[play_index].turn(self.board)
       play_index = (play_index + 1) % 2
     end
 
-    # if winner = board.checkmate?
-#       puts "Congratulations #{winner.to_s.capitalize}!"
-#     else
-#       puts "Stalemate!"
-#     end
+    if board.stalemate?(players[play_index - 1].color)
+      puts "Stalemate!"
+    else
+      winner = players[play_index]
+      puts "Congratulations #{winner.to_s.capitalize}!"
+    end
 
   end
 
@@ -47,8 +48,8 @@ class Chess
 
   end
 
-  def end_game?
-    board.checkmate? or board.stalemate?
+  def end_game?(player)
+    board.checkmate?(player) or board.stalemate?(player)
   end
 
 end
