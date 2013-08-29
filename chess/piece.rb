@@ -52,7 +52,7 @@ class Piece
 
   def move_possible?(dest, timeframe, board)
 
-    puts "\t#{self.position}"
+    # puts "\t#{self.position}"
 
 
     return false unless dest_in_bounds?(dest)
