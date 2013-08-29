@@ -72,6 +72,7 @@ class Piece
     origin = self.position
     saved_piece = move!(dest, board)
     if board.in_check?(self.color, :next_move)
+      debugger
       move!(origin, board)
       board.board[dest].piece = saved_piece
       return true
