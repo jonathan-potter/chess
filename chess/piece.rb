@@ -47,6 +47,7 @@ class Piece
   def available_moves(board, timeframe)
     moves = plausible_moves(board)
     moves.select! { |move| move_possible?(move, timeframe, board) }
+    moves
   end
 
   def move_possible?(dest, timeframe, board)
@@ -60,7 +61,7 @@ class Piece
       return false if board.board[dest].piece.color == self.color
     end
 
-    unless timeframe == :currently
+    if timeframe == :currently
       return false if moved_into_check?(dest, board)
     end
 
@@ -70,7 +71,7 @@ class Piece
   def moved_into_check?(dest, board)
     origin = self.position
     saved_piece = move!(dest, board)
-    if board.in_check?(self.color)
+    if board.in_check?(self.color, :next_move)
       move!(origin, board)
       board.board[dest].piece = saved_piece
       return true

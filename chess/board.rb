@@ -80,7 +80,7 @@ class Board
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(board, :next_move)
+      moves = piece.available_moves(self, :next_move)
       return false if moves.any?
     end
 
@@ -88,7 +88,7 @@ class Board
   end
 
   def stalemate?(color)
-    return false if in_check?(self, :currently)
+    return false if in_check?(color, :currently)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
