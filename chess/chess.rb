@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require './board.rb'
 require './player.rb'
-require 'debugger'
+require 'debugger';debugger
 
 class Chess
   attr_accessor :board, :players
@@ -48,8 +48,8 @@ class Chess
 
   end
 
-  def end_game?(player)
-    board.checkmate?(player) or board.stalemate?(player)
+  def end_game?(color)
+    board.checkmate?(color) or board.stalemate?(color)
   end
 
 end

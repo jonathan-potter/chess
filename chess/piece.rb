@@ -44,19 +44,25 @@ class Piece
     true
   end
 
-  def available_moves(board)
+  def available_moves(board, timeframe)
     moves = plausible_moves(board)
-    moves.select! { |move| move_possible?(move, board) }
+    moves.select! { |move| move_possible?(move, timeframe, board) }
   end
 
-  def move_possible?(dest, board)
+  def move_possible?(dest, timeframe, board)
+
+    puts "\t#{self.position}"
+
 
     return false unless dest_in_bounds?(dest)
+    debugger if board.is_a?(Hash)
     unless board.board[dest].piece.nil?
       return false if board.board[dest].piece.color == self.color
     end
 
-    return false if moved_into_check?(dest, board)
+    unless timeframe == :currently
+      return false if moved_into_check?(dest, board)
+    end
 
     true
   end
@@ -107,8 +113,8 @@ class Pawn < Piece
     []
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
     dest_piece = board.board[dest].piece
     unless dest_piece.nil?
       return false if self.position[0] == dest_piece.position[0]
@@ -153,8 +159,8 @@ class Rook < Piece
     Rook.rook_lines(origin)
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
 
     origin = self.position
 
@@ -185,8 +191,8 @@ class Knight < Piece
 
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
     true
   end
 end
@@ -229,8 +235,8 @@ class Bishop < Piece
     Bishop.bishop_lines(origin)
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
 
     origin = self.position
 
@@ -249,8 +255,8 @@ class Queen < Piece
     Rook.rook_lines(origin) + Bishop.bishop_lines(origin)
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
 
     origin = self.position
 
@@ -280,8 +286,8 @@ class King < Piece
 
   end
 
-  def move_possible?(dest, board)
-    return false unless super(dest, board)
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
     true
   end
 end

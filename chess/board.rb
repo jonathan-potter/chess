@@ -61,24 +61,26 @@ class Board
     end
   end
 
-  def in_check?(color)
+  # added timeframe to in_check? to avoid recursion
+  def in_check?(color, timeframe)
     king = find_king(color)
     opp_pieces = all_pieces(other_color(color))
 
+    moves = []
     opp_pieces.each do |piece|
-      moves = piece.available_moves
-      return true if moves.include?(king.position)
+      moves << piece.available_moves(self, timeframe)
     end
+    return true if moves.include?(king.position)
 
     false
   end
 
   def checkmate?(color)
-    return false unless in_check?(color)
+    return false unless in_check?(color, :currently)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves
+      moves = piece.available_moves(board, :next_move)
       return false if moves.any?
     end
 
@@ -86,11 +88,11 @@ class Board
   end
 
   def stalemate?(color)
-    return false if in_check?(color)
+    return false if in_check?(self, :currently)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves
+      moves = piece.available_moves(self, :next_move)
       return false if moves.any?
     end
 
