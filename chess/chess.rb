@@ -38,13 +38,22 @@ class Chess
       rows << row
     end
 
-    puts '-' * ((8*4) + 1)
-    rows.each do |row|
-      print "| "
+    print '   '
+    puts '-' * 31
+    rows.each_with_index do |row, i|
+      print "#{8 - i} | "
       print row.join(" | ")
       puts " |"
-      puts '-' * ((8*4) + 1)
+      print '   '
+      puts '-' * 31
     end
+
+    print '  '
+    ('a'..'h').each do |let|
+      print "  #{let} "
+    end
+    puts ''
+    puts ''
 
   end
 

@@ -1,18 +1,18 @@
 # encoding: UTF-8
 class Piece
   PIECES = {
-    [:black, :king] => '♔',
-    [:black, :queen] => '♕',
-    [:black, :rook] => '♖',
-    [:black, :bishop] => '♗',
-    [:black, :knight] => '♘',
-    [:black, :pawn] => '♙',
-    [:white, :king] => '♚',
-    [:white, :queen] => '♛',
-    [:white, :rook] => '♜',
-    [:white, :bishop] => '♝',
-    [:white, :knight] => '♞',
-    [:white, :pawn] => '♟' }
+    [:black, :king] => '♚',
+    [:black, :queen] => '♛',
+    [:black, :rook] => '♜',
+    [:black, :bishop] => '♝',
+    [:black, :knight] => '♞',
+    [:black, :pawn] => '♟',
+    [:white, :king] => '♔',
+    [:white, :queen] => '♕',
+    [:white, :rook] => '♖',
+    [:white, :bishop] => '♗',
+    [:white, :knight] => '♘',
+    [:white, :pawn] =>  '♙'}
 
   attr_accessor :position, :color, :name
 
