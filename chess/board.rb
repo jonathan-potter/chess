@@ -71,7 +71,7 @@ class Board
 
     moves = []
     opp_pieces.each do |piece|
-      moves << piece.available_moves(self, timeframe)
+      moves = moves + piece.available_moves(self, timeframe)
     end
     return true if moves.include?(king.position)
 

@@ -33,7 +33,7 @@ class HumanPlayer < Player
   def get_valid_move(board)
     input = gets.chomp
 
-    return nil unless input =~ /^[a-h][1-8]\,?\s[a-h][1-8]$/
+    raise "invalid input" unless input =~ /^[a-h][1-8]\,?\s[a-h][1-8]$/
 
     if input.include?(',')
       input = input.split(', ')

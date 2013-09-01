@@ -53,6 +53,8 @@ class Piece
       return false if board.board[dest].piece.color == self.color
     end
 
+    # only check if a single move from the current status of the board will
+    # put you in check. this will prevent unintended recursive calls
     if timeframe == :currently
       return false if moved_into_check?(dest, board)
     end
