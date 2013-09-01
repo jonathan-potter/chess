@@ -35,23 +35,12 @@ class Rook < Piece
     Rook.rook_lines(origin)
   end
 
-  def move_possible?(dest, board, ignore = false)
-    # return false unless super(dest, board)
-
-    return false unless dest_in_bounds?(dest)
-    unless board.board[dest].piece.nil?
-      return false if board.board[dest].piece.color == self.color
-    end
+  def move_possible?(dest, timeframe, board)
+    return false unless super(dest, timeframe, board)
 
     origin = self.position
 
-    return false unless Rook.check_lines(origin, dest, board)
-
-    unless ignore
-      return false if moved_into_check?(dest, board)
-    end
-
-    true
+    Rook.check_lines(origin, dest, board)
   end
 
 end

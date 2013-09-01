@@ -29,11 +29,6 @@ class Pawn < Piece
 
     attacking_moves(board).each { |move| moves << move }
 
-    # p self.object_id
-    # p self.position
-    # p self.color
-    # p moves
-
     moves
   end
 
