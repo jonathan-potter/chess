@@ -1,3 +1,4 @@
+require './pieces/piece'
 class Queen < Piece
   def initialize(color, position)
     super(color, position)

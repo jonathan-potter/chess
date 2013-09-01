@@ -1,7 +1,6 @@
 # encoding: UTF-8
 require './board.rb'
 require './player.rb'
-require 'debugger';debugger
 
 class Chess
   attr_accessor :board, :players
@@ -38,14 +37,18 @@ class Chess
       rows << row
     end
 
+    print '  '
     puts '-' * ((8*4) + 1)
-    rows.each do |row|
-      print "| "
+    rows.each_with_index do |row,index|
+      print "#{8 - index} | "
       print row.join(" | ")
       puts " |"
+      print '  '
       puts '-' * ((8*4) + 1)
     end
-
+    print '  '
+    ('a'..'h').each { |x| print "  #{x} " }
+    puts ""
   end
 
   def end_game?(color)

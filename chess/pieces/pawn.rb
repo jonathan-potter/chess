@@ -1,3 +1,4 @@
+require './pieces/piece'
 class Pawn < Piece
 
   COLORS = { white: 1, black: -1 }
