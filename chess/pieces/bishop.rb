@@ -8,7 +8,7 @@ class Bishop < Piece
   def self.bishop_lines(origin)
     [].tap do |moves|
       (-7..7).each do |offset|
-        dest_x = Piece.num_to_let( Piece.let_to_num(origin[0]) + offset )
+        dest_x = Piece.let_offset(origin[0], offset)
         dest_y = origin[1] + offset
         moves << [dest_x, dest_y]
 
@@ -19,7 +19,7 @@ class Bishop < Piece
   end
 
   def self.check_lines(origin, dest, board)
-    return true if dest == origin
+    return false if dest == origin
     dest_0 = Piece.let_to_num(dest[0])
     origin_0 = Piece.let_to_num(origin[0])
 
@@ -30,7 +30,7 @@ class Bishop < Piece
     (diff + 1).times do |axis_offset|
       x = Piece.let_offset(origin[0], (axis_offset * x_sign))
       y = origin[1] + (axis_offset * y_sign)
-      piece = board.board[[x, y]]
+      piece = board.board[[x, y]].piece
       unless origin == [x, y] or dest == [x, y]
         return false unless piece.nil?
       end

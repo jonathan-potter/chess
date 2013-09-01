@@ -53,7 +53,7 @@ class HumanPlayer < Player
   def move!(input,board)
     origin = input[0]
     dest = input[1]
-    dead_piece = board.board[origin].piece.move!(dest, board)
+    dead_piece = board.board[origin].piece.move!(dest, board, false)
     board.dead_pieces << dead_piece
   end
 
