@@ -21,11 +21,12 @@ class Chess
       play_index = (play_index + 1) % 2
     end
 
+    self.display
     if board.stalemate?(players[play_index - 1].color)
       puts "Stalemate!"
     else
       winner = players[play_index]
-      puts "Congratulations #{winner.to_s.capitalize}!"
+      puts "Congratulations #{board.other_color(winner.color).to_s.capitalize}!"
     end
 
   end

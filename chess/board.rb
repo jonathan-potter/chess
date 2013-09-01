@@ -83,7 +83,7 @@ class Board
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(self, :next_move)
+      moves = piece.available_moves(self, :currently)
       return false if moves.any?
     end
 
@@ -95,7 +95,7 @@ class Board
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(self, :next_move)
+      moves = piece.available_moves(self, :currently)
       return false if moves.any?
     end
 
@@ -107,9 +107,11 @@ class Board
       (1..8).each do |y|
         piece = self.board[[x, y]].piece
         next if piece.nil?
-        return piece if (piece.color == color and piece.name == :king)
+        return piece if piece.color == color and piece.name == :king
       end
     end
+
+    raise "no king found!!"
   end
 
   def all_pieces(color)
