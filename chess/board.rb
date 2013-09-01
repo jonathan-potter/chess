@@ -104,7 +104,7 @@ class Board
       (1..8).each do |y|
         piece = self.board[[x, y]].piece
         next if piece.nil?
-        return piece if piece.color == color and piece.name == :king
+        return piece if (piece.color == color and piece.name == :king)
       end
     end
   end
