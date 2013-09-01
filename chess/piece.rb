@@ -52,11 +52,7 @@ class Piece
 
   def move_possible?(dest, timeframe, board)
 
-    # puts "\t#{self.position}"
-
-
     return false unless dest_in_bounds?(dest)
-    debugger if board.is_a?(Hash)
     unless board.board[dest].piece.nil?
       return false if board.board[dest].piece.color == self.color
     end
@@ -72,7 +68,6 @@ class Piece
     origin = self.position
     saved_piece = move!(dest, board)
     if board.in_check?(self.color, :next_move)
-      debugger
       move!(origin, board)
       board.board[dest].piece = saved_piece
       return true

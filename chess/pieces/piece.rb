@@ -44,80 +44,38 @@ class Piece
     true
   end
 
-  def available_moves(board, &blk)
-    blk ||= Proc.new { |move| move_possible?(move, board) }
-
+  def available_moves(board, timeframe)
     moves = plausible_moves(board)
-    # moves.delete(self.position)
-
-    moves.select!(&blk)
-    #p moves if self.name == :king
+    moves.select! { |move| move_possible?(move, timeframe, board) }
     moves
   end
 
-  def move_possible?(dest, board, ignore = false)
+  def move_possible?(dest, timeframe, board)
 
     return false unless dest_in_bounds?(dest)
     unless board.board[dest].piece.nil?
       return false if board.board[dest].piece.color == self.color
     end
 
-    unless ignore
+    if timeframe == :currently
       return false if moved_into_check?(dest, board)
     end
 
     true
   end
 
-  # def ignore_check_move_possible?(dest, board)
-  #
-  #   return false unless dest_in_bounds?(dest)
-  #   unless board.board[dest].piece.nil?
-  #     return false if board.board[dest].piece.color == self.color
-  #   end
-  #
-  #   true
-  # end
-
   def moved_into_check?(dest, board)
     origin = self.position
     saved_piece = move!(dest, board)
-    king = board.find_king(self.color)
-    k_pos = king.position
-    color = king.color
-
-    pieces = [Pawn.new(color,k_pos),
-              Bishop.new(color,k_pos),
-              Knight.new(color,k_pos),
-              Rook.new(color,k_pos),
-              king]
-
-    # pieces[0].has_moved = true
-
-    no_check_proc = Proc.new { |move| move_possible?(move, board, true) }
-
-    pieces.each do |piece|
-      moves = piece.available_moves(board, &no_check_proc)
-      moves.each do |move|
-        enemy = board.board[move].piece
-        next if enemy.nil?
-
-        next if enemy.color == color
-        if (enemy.name == piece.name or enemy.name == :queen)
-          next if piece.name == :pawn and piece.position[0] == k_pos[0]
-          move!(origin, board)
-          board.board[dest].piece = saved_piece
-          p "king in check: #{dest} #{enemy.name} #{enemy.position}"
-          p "enemy available moves: #{enemy.available_moves(board, &no_check_proc)}"
-          return true
-        end
-      end
+    if board.in_check?(self.color, :next_move)
+      move!(origin, board)
+      board.board[dest].piece = saved_piece
+      return true
+    else
+      move!(origin, board)
+      board.board[dest].piece = saved_piece
     end
 
-    move!(origin, board)
-    board.board[dest].piece = saved_piece
-
-    p "king not in check: #{dest}" if self.name == :king
     false
   end
 
