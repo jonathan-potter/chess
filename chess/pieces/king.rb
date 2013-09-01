@@ -5,7 +5,6 @@ class King < Piece
   end
 
   def plausible_moves(board)
-
     origin = self.position
     [].tap do |moves|
       [-1, 0, 1].each do |x_offset|
