@@ -117,6 +117,7 @@ class Pawn < Piece
 
   def move_possible?(dest, timeframe, board)
     return false unless super(dest, timeframe, board)
+
     dest_piece = board.board[dest].piece
     unless dest_piece.nil?
       return false if self.position[0] == dest_piece.position[0]
