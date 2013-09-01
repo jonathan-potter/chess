@@ -13,6 +13,10 @@ class HumanPlayer < Player
   def turn(board)
     input = take_input(board)
     move!(input,board)
+
+  rescue StandardError => e
+    puts e.message
+    retry
   end
 
   def take_input(board)
@@ -36,13 +40,13 @@ class HumanPlayer < Player
     else
       input = input.split(' ')
     end
+
     origin = [input[0][0], input[0][1].to_i]
     dest = [input[1][0], input[1][1].to_i]
-    [origin, dest]
 
     piece = board.board[origin].piece
-    return nil if piece.nil?
-    return nil if piece.color != self.color
+    raise "you must move a piece" if piece.nil?
+    raise "you can't move enemy pieces" if piece.color != self.color
     available_moves = piece.available_moves(board, :currently)
 
     return [origin, dest] if available_moves.include?(dest)
