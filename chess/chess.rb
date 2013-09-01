@@ -1,6 +1,9 @@
 # encoding: UTF-8
+
+require 'colorize'
 require './board.rb'
 require './player.rb'
+require 'debugger'
 
 class Chess
   attr_accessor :board, :players
@@ -32,22 +35,24 @@ class Chess
     (1..8).to_a.reverse.each do |y|
       row = []
       ('a'..'h').each do |x|
-        row << board.board[[x,y]].to_s
+        row << board.board[[x,y]]
       end
       rows << row
     end
 
-    print '  '
-    puts '-' * ((8*4) + 1)
     rows.each_with_index do |row,index|
-      print "#{8 - index} | "
-      print row.join(" | ")
-      puts " |"
-      print '  '
-      puts '-' * ((8*4) + 1)
+      print " #{8 - index} "
+      row.each do |tile|
+        if tile.piece.nil?
+          print "   ".colorize(:background => tile.color)
+        else
+          print " #{tile} ".colorize(:background => tile.color, :color => tile.piece.color)
+        end
+      end
+      puts ""
     end
-    print '  '
-    ('a'..'h').each { |x| print "  #{x} " }
+    print '   '
+    ('a'..'h').each { |x| print " #{x} " }
     puts ""
   end
 

@@ -1,18 +1,11 @@
 # encoding: UTF-8
 class Piece
-  PIECES = {
-    [:black, :king] => '♚',
-    [:black, :queen] => '♛',
-    [:black, :rook] => '♜',
-    [:black, :bishop] => '♝',
-    [:black, :knight] => '♞',
-    [:black, :pawn] => '♟',
-    [:white, :king] => '♔',
-    [:white, :queen] => '♕',
-    [:white, :rook] => '♖',
-    [:white, :bishop] => '♗',
-    [:white, :knight] => '♘',
-    [:white, :pawn] =>  '♙'}
+  PIECES = {  :king => '♚',
+              :queen => '♛',
+              :rook => '♜',
+              :bishop => '♝',
+              :knight => '♞',
+              :pawn => '♟'}
 
   attr_accessor :position, :color, :name
 
@@ -80,7 +73,7 @@ class Piece
   end
 
   def to_s
-    PIECES[[self.color, self.name]]
+    PIECES[self.name]
   end
 
   def self.let_offset(let, offset)

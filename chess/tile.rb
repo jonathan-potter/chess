@@ -7,10 +7,11 @@ require './pieces/queen'
 require './pieces/king'
 
 class Tile
-  attr_accessor :piece, :position
+  attr_accessor :piece, :position, :color
 
-  def initialize(coord)
+  def initialize(coord, color)
     self.position = coord
+    self.color = color
   end
 
   def to_s

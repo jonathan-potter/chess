@@ -11,10 +11,13 @@ class Board
   end
 
   def build_board
+    color = :cyan
     {}.tap do |hash|
       ('a'..'h').each do |x|
+        color = other_board_color(color)
         (1..8).each do |y|
-          hash[[x, y]] = Tile.new([x, y])
+          hash[[x, y]] = Tile.new([x, y], color)
+          color = other_board_color(color)
         end
       end
     end
@@ -126,5 +129,9 @@ class Board
     color == :white ? :black : :white
   end
 
+  def other_board_color(color)
+    return :cyan if color == :light_blue
+    :light_blue
+  end
 
 end
