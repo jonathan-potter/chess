@@ -13,6 +13,10 @@ class HumanPlayer < Player
   def turn(board)
     input = take_input(board)
     move!(input,board)
+
+  rescue StandardError => e
+    puts e.message
+    retry
   end
 
   def take_input(board)
@@ -28,20 +32,21 @@ class HumanPlayer < Player
   def get_valid_move(board)
     input = gets.chomp
 
-    return nil unless input =~ /^[a-h][1-8]\,?\s[a-h][1-8]$/
+    raise "invalid input" unless input =~ /^[a-h][1-8]\,?\s[a-h][1-8]$/
 
     if input.include?(',')
       input = input.split(', ')
     else
       input = input.split(' ')
     end
+
     origin = [input[0][0], input[0][1].to_i]
     dest = [input[1][0], input[1][1].to_i]
 
     piece = board.board[origin].piece
-    return nil if piece.nil?
-    return nil if piece.color != self.color
-    available_moves = piece.available_moves(board)
+    raise "you must move a piece" if piece.nil?
+    raise "you can't move enemy pieces" if piece.color != self.color
+    available_moves = piece.available_moves(board, :currently)
 
     return [origin, dest] if available_moves.include?(dest)
 
@@ -51,7 +56,7 @@ class HumanPlayer < Player
   def move!(input,board)
     origin = input[0]
     dest = input[1]
-    dead_piece = board.board[origin].piece.move!(dest, board)
+    dead_piece = board.board[origin].piece.move!(dest, board, false)
     board.dead_pieces << dead_piece
   end
 

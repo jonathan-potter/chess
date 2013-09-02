@@ -11,10 +11,13 @@ class Board
   end
 
   def build_board
+    color = :cyan
     {}.tap do |hash|
       ('a'..'h').each do |x|
+        color = other_board_color(color)
         (1..8).each do |y|
-          hash[[x, y]] = Tile.new([x, y])
+          hash[[x, y]] = Tile.new([x, y], color)
+          color = other_board_color(color)
         end
       end
     end
@@ -61,28 +64,26 @@ class Board
     end
   end
 
-  def in_check?(color)
+  # added timeframe to in_check? to avoid recursion
+  def in_check?(color, timeframe)
     king = find_king(color)
     opp_pieces = all_pieces(other_color(color))
 
+    moves = []
     opp_pieces.each do |piece|
-      moves = piece.available_moves(self)
-      if moves.include?(king.position)
-        return true
-      end
+      moves = moves + piece.available_moves(self, timeframe)
     end
+    return true if moves.include?(king.position)
 
     false
   end
 
   def checkmate?(color)
-    return false unless in_check?(color)
+    return false unless in_check?(color, :currently)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(self) do |move|
-        ignore_check_move_possible?(move, board)
-      end
+      moves = piece.available_moves(self, :currently)
       return false if moves.any?
     end
 
@@ -90,12 +91,11 @@ class Board
   end
 
   def stalemate?(color)
-    return false if in_check?(color)
+    return false if in_check?(color, :currently)
 
     our_pieces = all_pieces(color)
     our_pieces.each do |piece|
-      moves = piece.available_moves(self)
-   debugger if moves.nil?
+      moves = piece.available_moves(self, :currently)
       return false if moves.any?
     end
 
@@ -111,7 +111,8 @@ class Board
         return piece if (piece.color == color and piece.name == :king)
       end
     end
-    raise "King not found for #{color}"
+
+    raise "no king found!!"
   end
 
   def all_pieces(color)
@@ -131,5 +132,9 @@ class Board
     color == :white ? :black : :white
   end
 
+  def other_board_color(color)
+    return :cyan if color == :light_blue
+    :light_blue
+  end
 
 end

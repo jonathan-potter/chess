@@ -1,4 +1,6 @@
 # encoding: UTF-8
+
+require 'colorize'
 require './board.rb'
 require './player.rb'
 require 'debugger'
@@ -19,11 +21,12 @@ class Chess
       play_index = (play_index + 1) % 2
     end
 
+    self.display
     if board.stalemate?(players[play_index - 1].color)
       puts "Stalemate!"
     else
       winner = players[play_index]
-      puts "Congratulations #{winner.to_s.capitalize}!"
+      puts "Congratulations #{board.other_color(winner.color).to_s.capitalize}!"
     end
 
   end
@@ -33,32 +36,29 @@ class Chess
     (1..8).to_a.reverse.each do |y|
       row = []
       ('a'..'h').each do |x|
-        row << board.board[[x,y]].to_s
+        row << board.board[[x,y]]
       end
       rows << row
     end
 
+    rows.each_with_index do |row,index|
+      print " #{8 - index} "
+      row.each do |tile|
+        if tile.piece.nil?
+          print "   ".colorize(:background => tile.color)
+        else
+          print " #{tile} ".colorize(:background => tile.color, :color => tile.piece.color)
+        end
+      end
+      puts ""
+    end
     print '   '
-    puts '-' * 31
-    rows.each_with_index do |row, i|
-      print "#{8 - i} | "
-      print row.join(" | ")
-      puts " |"
-      print '   '
-      puts '-' * 31
-    end
-
-    print '  '
-    ('a'..'h').each do |let|
-      print "  #{let} "
-    end
-    puts ''
-    puts ''
-
+    ('a'..'h').each { |x| print " #{x} " }
+    puts ""
   end
 
-  def end_game?(player)
-    board.checkmate?(player) or board.stalemate?(player)
+  def end_game?(color)
+    board.checkmate?(color) or board.stalemate?(color)
   end
 
 end
