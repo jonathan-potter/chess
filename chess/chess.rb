@@ -15,7 +15,7 @@ class Chess
 
   def play
     play_index = 0
-    until false #end_game?(players[play_index].color)
+    until end_game?(players[play_index].color)
       display
       players[play_index].turn(self.board)
       play_index = (play_index + 1) % 2

@@ -1,5 +1,4 @@
 # encoding: UTF-8
-#
 require './pieces/pawn'
 require './pieces/rook'
 require './pieces/knight'

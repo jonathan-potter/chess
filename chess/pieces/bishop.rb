@@ -1,6 +1,4 @@
-
 require './pieces/piece'
-
 class Bishop < Piece
   def initialize(color, position)
     super(color, position)
@@ -22,7 +20,6 @@ class Bishop < Piece
 
   def self.check_lines(origin, dest, board)
     return false if dest == origin
-
     dest_0 = Piece.let_to_num(dest[0])
     origin_0 = Piece.let_to_num(origin[0])
 
@@ -33,9 +30,7 @@ class Bishop < Piece
     (diff + 1).times do |axis_offset|
       x = Piece.let_offset(origin[0], (axis_offset * x_sign))
       y = origin[1] + (axis_offset * y_sign)
-
       piece = board.board[[x, y]].piece
-
       unless origin == [x, y] or dest == [x, y]
         return false unless piece.nil?
       end

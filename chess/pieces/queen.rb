@@ -1,6 +1,4 @@
-
 require './pieces/piece'
-
 class Queen < Piece
   def initialize(color, position)
     super(color, position)
@@ -22,7 +20,7 @@ class Queen < Piece
     else
       return false unless Bishop.check_lines(origin, dest, board)
     end
-    
+
     true
   end
 

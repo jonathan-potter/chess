@@ -26,6 +26,7 @@ class HumanPlayer < Player
       print "#{color_s}'s Turn (b1, c3): "
       input = get_valid_move(board)
     end
+
     input
   end
 

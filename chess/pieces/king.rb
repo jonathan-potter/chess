@@ -1,6 +1,4 @@
-
 require './pieces/piece'
-
 class King < Piece
   def initialize(color, position)
     super(color, position)
@@ -8,7 +6,6 @@ class King < Piece
   end
 
   def plausible_moves(board)
-
     origin = self.position
     [].tap do |moves|
       [-1, 0, 1].each do |x_offset|

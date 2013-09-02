@@ -1,6 +1,5 @@
 # encoding: UTF-8
 class Piece
-
   PIECES = {  :king => '♚',
               :queen => '♛',
               :rook => '♜',
@@ -16,7 +15,6 @@ class Piece
   end
 
   def move!(dest, board, test)
-
     raise "Out of Bounds." unless dest_in_bounds?(dest)
 
     dead_piece = board.board[dest].piece
@@ -58,7 +56,6 @@ class Piece
     # only check if a single move from the current status of the board will
     # put you in check. this will prevent unintended recursive calls
     if timeframe == :currently
-
       return false if moved_into_check?(dest, board)
     end
 

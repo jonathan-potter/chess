@@ -1,24 +1,19 @@
-
 require './pieces/piece'
-
 class Pawn < Piece
 
   COLORS = { white: 1, black: -1 }
 
   attr_accessor :first_move
 
-
   def initialize(color, position)
     super(color, position)
     self.name = :pawn
-
     self.first_move = true
   end
 
   def move!(dest, board, test)
     self.first_move = false if test == false
     super(dest, board, test)
-
   end
 
   def plausible_moves(board)
